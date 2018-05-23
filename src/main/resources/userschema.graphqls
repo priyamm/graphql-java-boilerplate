@@ -1,0 +1,32 @@
+schema {
+	query: Query
+}
+
+type User {
+    _id: ID!
+    name: String!
+    surname: String!
+    age: Int
+    location: String!
+    details: [Details]
+}
+ 
+type Details {
+    _id: ID!
+    ref: String!
+    profession: String!
+    qualification: String
+    experience : String
+    skills : [String]
+}
+ 
+# The Root Query for the application
+type Query {
+    users: [User]!
+    userDetails(id: String) : [Details]!
+}
+ 
+# The Root Mutation for the application
+type Mutation {
+    createUser(name: String!, surname: String!, age: Int, location : String) : User!
+}
