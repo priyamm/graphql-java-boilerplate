@@ -27,6 +27,7 @@ public class UserResource {
 
 	@PostMapping(value = "user")
 	public ResponseEntity<Object> getUsers(@RequestBody String query) {
+		
 		ExecutionResult execute = graphQLService.getGraphQL().execute(query);
 		return new ResponseEntity<>(execute, HttpStatus.OK);
 	}
