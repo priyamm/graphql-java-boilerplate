@@ -5,19 +5,18 @@ package com.abcplusd.masterapi.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.scheduling.config.ScheduledTaskHolder;
 import org.springframework.stereotype.Service;
 
 import com.abcplusd.masterapi.service.datafetcher.UserDetailsDataFetcher;
 import com.abcplusd.masterapi.service.datafetcher.UsersDataFetcher;
-import com.coxautodev.graphql.tools.Resolver;
 
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -37,8 +36,7 @@ public class GraphQLService {
 //	@Value("classpath:userschema.graphqls")
 //	Resource resource;
 	
-	@Autowired
-	ResourceLoader resources;
+	Resource classPathResource;
 
 	private GraphQL build;
 
@@ -54,13 +52,17 @@ public class GraphQLService {
 
 		// String schema = "type Query{hello: String}";
 //		File schemaFile = resource.getFile();
-//		Resource res = resources.getResource("classpath:schema.graphqls");
-		
-		File schemaFile = resources.getResource("classpath:userschema.graphqls").getFile();
+//		Resource esources.getResource("classpath:schema.graphqls")
+	    classPathResource = new ClassPathResource("userschema.graphqls");
+	    InputStream inputStream = classPathResource.getInputStream();
+	    File somethingFile = File.createTempFile("test", ".graphqls");
+	    FileUtils.copyInputStreamToFile(inputStream, somethingFile);
+	        
+//		File schemaFile = resource.getInputStream();
 
 		// parse schema
 		SchemaParser schemaParser = new SchemaParser();
-		TypeDefinitionRegistry typeDefinitionRegistry = schemaParser.parse(schemaFile);
+		TypeDefinitionRegistry typeDefinitionRegistry = schemaParser.parse(somethingFile);
 		
 		// RuntimeWiring runtimeWiring = newRuntimeWiring()
 		// .type("Query", builder -> builder.dataFetcher("hello", new
