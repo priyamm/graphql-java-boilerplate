@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.config.ScheduledTaskHolder;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +34,11 @@ import graphql.schema.idl.TypeDefinitionRegistry;
 @Service
 public class GraphQLService {
 
-	@Value("classpath:userschema.graphqls")
-	Resource resource;
+//	@Value("classpath:userschema.graphqls")
+//	Resource resource;
+	
+	@Autowired
+	ResourceLoader resources;
 
 	private GraphQL build;
 
@@ -49,7 +53,10 @@ public class GraphQLService {
 		// loading the schema
 
 		// String schema = "type Query{hello: String}";
-		File schemaFile = resource.getFile();
+//		File schemaFile = resource.getFile();
+//		Resource res = resources.getResource("classpath:schema.graphqls");
+		
+		File schemaFile = resources.getResource("classpath:userschema.graphqls").getFile();
 
 		// parse schema
 		SchemaParser schemaParser = new SchemaParser();
